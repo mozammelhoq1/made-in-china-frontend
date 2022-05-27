@@ -10,7 +10,7 @@ const NavigationBar = () => {
       variant="light"
       expand="lg"
       sticky="top"
-      className="shadow-sm"
+      className="shadow-sm mb-5"
     >
       <Container>
         <Navbar.Brand href="#">
@@ -25,11 +25,14 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="about">
-              About
+            <Nav.Link as={Link} to="products">
+              Shop
             </Nav.Link>
             <Nav.Link as={Link} to="blogs">
               Blogs
+            </Nav.Link>
+            <Nav.Link as={Link} to="about">
+              About
             </Nav.Link>
           </Nav>
           <Navbar.Text>
