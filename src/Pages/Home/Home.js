@@ -1,11 +1,12 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import Banner from "./Banner";
+import FeatureProducts from "./FeatureProducts";
 
 const Home = () => {
   return (
     <>
       <Banner />
+      <FeatureProducts />
     </>
   );
 };

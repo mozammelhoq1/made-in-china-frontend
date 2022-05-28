@@ -35,7 +35,7 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="about">
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="login">
+            <Nav.Link as={Link} to="login" className="text-dark">
               <span className="me-2">LOG IN</span>
               <FontAwesomeIcon icon={faCircleArrowLeft}></FontAwesomeIcon>
             </Nav.Link>
