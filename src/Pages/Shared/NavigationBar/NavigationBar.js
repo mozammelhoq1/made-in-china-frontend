@@ -1,8 +1,9 @@
+import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import logo from "../../Images/logo.webp";
-
+import logo from "../../../Images/logo.webp";
 const NavigationBar = () => {
   return (
     <Navbar
@@ -21,12 +22,12 @@ const NavigationBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav className="ms-auto fw-bold">
+          <Nav className="ms-auto fw-bold text-center">
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
             <Nav.Link as={Link} to="products">
-              Shop
+              Explore
             </Nav.Link>
             <Nav.Link as={Link} to="blogs">
               Blogs
@@ -34,10 +35,11 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="about">
               About
             </Nav.Link>
+            <Nav.Link as={Link} to="login">
+              <span className="me-2">LOG IN</span>
+              <FontAwesomeIcon icon={faCircleArrowLeft}></FontAwesomeIcon>
+            </Nav.Link>
           </Nav>
-          <Navbar.Text>
-            <a href="#login">Mark Otto</a>
-          </Navbar.Text>
         </Navbar.Collapse>
       </Container>
     </Navbar>
