@@ -1,10 +1,20 @@
-import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleArrowLeft,
+  faCircleArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signOut } from "firebase/auth";
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import auth from "../../../firebase.init";
 import logo from "../../../Images/logo.webp";
 const NavigationBar = () => {
+  const [user] = useAuthState(auth);
+  const handleLogOut = () => {
+    signOut(auth);
+  };
   return (
     <Navbar
       bg="light"
@@ -26,19 +36,31 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="products">
+            <Nav.Link as={Link} to="/products">
               Explore
             </Nav.Link>
-            <Nav.Link as={Link} to="blogs">
+            <Nav.Link as={Link} to="/blogs">
               Blogs
             </Nav.Link>
-            <Nav.Link as={Link} to="about">
+            <Nav.Link as={Link} to="/about">
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="login" className="text-dark">
-              <span className="me-2">LOG IN</span>
-              <FontAwesomeIcon icon={faCircleArrowLeft}></FontAwesomeIcon>
-            </Nav.Link>
+            {user ? (
+              <Nav.Link
+                onClick={handleLogOut}
+                as={Link}
+                to="/login"
+                className="text-dark"
+              >
+                <span className="me-2">LOG OUT</span>
+                <FontAwesomeIcon icon={faCircleArrowRight}></FontAwesomeIcon>
+              </Nav.Link>
+            ) : (
+              <Nav.Link as={Link} to="/login" className="text-dark">
+                <span className="me-2">LOG IN</span>
+                <FontAwesomeIcon icon={faCircleArrowLeft}></FontAwesomeIcon>
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

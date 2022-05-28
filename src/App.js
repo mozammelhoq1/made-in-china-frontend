@@ -6,9 +6,11 @@ import About from "./Pages/About/About";
 import Blogs from "./Pages/Blogs/Blogs";
 import Footer from "./Pages/Shared/Footer/Footer";
 import Products from "./Pages/Products/Products";
-import Login from "./Pages/Authentication/Login";
 import CheckOut from "./Pages/Products/CheckOut";
 import { Toaster } from "react-hot-toast";
+import Login from "./Pages/Authentication/Login";
+import Register from "./Pages/Authentication/Register";
+import RequireAuth from "./Pages/Authentication/RequireAuth";
 
 function App() {
   return (
@@ -16,11 +18,19 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="products" element={<Products />} />
-        <Route path="checkout/:productId" element={<CheckOut />} />
-        <Route path="about" element={<About />} />
-        <Route path="blogs" element={<Blogs />} />
-        <Route path="login" element={<Login />} />
+        <Route path="/products" element={<Products />} />
+        <Route
+          path="/checkout/:productId"
+          element={
+            <RequireAuth>
+              <CheckOut />
+            </RequireAuth>
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
       <Toaster />
