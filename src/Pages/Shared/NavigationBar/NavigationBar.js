@@ -4,7 +4,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "firebase/auth";
-import React from "react";
+import React, { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ const NavigationBar = () => {
       variant="light"
       expand="lg"
       sticky="top"
-      className="shadow-sm mb-5"
+      className="shadow-sm"
     >
       <Container>
         <Navbar.Brand href="#">
@@ -39,6 +39,11 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/products">
               Explore
             </Nav.Link>
+            {user && (
+              <Nav.Link as={Link} to="/dashboard">
+                Dashboard
+              </Nav.Link>
+            )}
             <Nav.Link as={Link} to="/blogs">
               Blogs
             </Nav.Link>

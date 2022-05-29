@@ -31,9 +31,13 @@ const CheckOut = () => {
       toast.error("you do not order grater then maximum limit");
       return;
     }
+    const newPrice = parseInt(price * newQuantity);
     const updateQuantity = parseInt(quantity - newQuantity);
     const order = {
       productId,
+      img: img,
+      productName: name,
+      price: newPrice,
       userName: e.target.name.value,
       email: e.target.email.value,
       quantity: newQuantity,

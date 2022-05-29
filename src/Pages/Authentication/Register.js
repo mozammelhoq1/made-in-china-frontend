@@ -11,6 +11,7 @@ import SocialLogin from "./SocialLogin";
 import loginImage from "../../Images/login.jpg";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useToken from "../../hooks/useToken";
 
 const Register = () => {
   const {
@@ -18,12 +19,13 @@ const Register = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const [createUserWithEmailAndPassword, loading] =
+  const [createUserWithEmailAndPassword, user, loading] =
     useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
   const [agree, setAgree] = useState(false);
+  const [token] = useToken(user);
 
   const navigate = useNavigate();
 
@@ -39,7 +41,7 @@ const Register = () => {
       await createUserWithEmailAndPassword(data.email, data.password);
       await updateProfile({ displayName: data.name });
       toast.success("Success");
-      navigate("/");
+      // navigate("/");
     }
   };
   return (

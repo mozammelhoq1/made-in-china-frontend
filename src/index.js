@@ -8,13 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 // bootstrap stylesheet
 import "bootstrap/dist/css/bootstrap.min.css";
 // react query
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
