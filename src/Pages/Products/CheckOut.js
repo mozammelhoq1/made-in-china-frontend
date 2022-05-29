@@ -2,10 +2,13 @@ import { faArrowRight, faReply } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import auth from "../../firebase.init";
 
 const CheckOut = () => {
+  const [user, loading, error] = useAuthState(auth);
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [update, setUpdate] = useState(true);
@@ -19,17 +22,40 @@ const CheckOut = () => {
   const minimumOrder = parseInt(Math.ceil(quantity / 20));
   const handleOrder = (e) => {
     e.preventDefault();
-    const name = e.target.name.value;
     const newQuantity = parseInt(e.target.quantity.value);
     if (newQuantity < minimumOrder) {
-      toast.error("please order minimum product");
+      toast.error("you do not order less then minimum limit");
+      return;
+    }
+    if (newQuantity > quantity) {
+      toast.error("you do not order grater then maximum limit");
       return;
     }
     const updateQuantity = parseInt(quantity - newQuantity);
+    const order = {
+      productId,
+      userName: e.target.name.value,
+      email: e.target.email.value,
+      quantity: newQuantity,
+      phone: e.target.number.value,
+      address: e.target.address.value,
+    };
+    const url = `http://localhost:5000/orders`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(order),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        toast.success("placed order successfully");
+        e.target.reset();
+      });
 
-    console.log(quantity, newQuantity, updateQuantity);
     setUpdate(!update);
-    e.target.reset();
   };
 
   return (
@@ -61,35 +87,10 @@ const CheckOut = () => {
           <p>{description}</p>
         </Col>
         <Col xs={12} sm={12} md={6}>
-          {/* <p>Product Id : {productId}</p>
-          <p>Name : {name}</p>
-          <p>Supplier : {supplier}</p>
-          <p>
-            Quantity :{" "}
-            {quantity === 0 ? (
-              <b className="text-danger">sold-out</b>
-            ) : (
-              quantity
-            )}
-          </p>
-          <p>Price : $ {price}</p>
-          <p>Description : {description}</p>
-          <Button
-            className="btn btn-sm btn-outline-dark w-100 my-2"
-            variant="light"
-          >
-            Delivery <FontAwesomeIcon icon={faRepeat} />
-          </Button> */}
           <Form onSubmit={handleOrder}>
             <Form.Group className="mb-3" controlId="formGridAddress2">
               <Form.Label>Product Id</Form.Label>
-              <Form.Control
-                type="text"
-                name="_id"
-                value={productId}
-                readOnly
-                disabled
-              />
+              <Form.Control type="text" value={productId} disabled />
             </Form.Group>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridPassword">
@@ -97,19 +98,26 @@ const CheckOut = () => {
                 <Form.Control
                   autoComplete="off"
                   type="text"
-                  placeholder="Your Name"
                   name="name"
+                  value={user?.displayName || ""}
+                  disabled
                 />
               </Form.Group>
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={user?.email || ""}
+                  disabled
+                />
               </Form.Group>
             </Row>
 
             <Form.Group className="mb-3" controlId="formGridAddress2">
               <Form.Label>Enter Product Quantity</Form.Label>
               <Form.Control
+                autoComplete="off"
                 required
                 type="number"
                 name="quantity"
@@ -119,6 +127,8 @@ const CheckOut = () => {
             <Form.Group className="mb-3" controlId="formGridAddress2">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
+                autoComplete="off"
+                required
                 type="number"
                 name="number"
                 placeholder="Enter Your Phone Number"
@@ -127,6 +137,8 @@ const CheckOut = () => {
             <Form.Group className="mb-3" controlId="formGridAddress2">
               <Form.Label>Address</Form.Label>
               <Form.Control
+                autoComplete="off"
+                required
                 type="text"
                 name="address"
                 placeholder="Apartment, studio, or floor"
