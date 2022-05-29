@@ -1,11 +1,8 @@
-import {
-  faArrowRight,
-  faRepeat,
-  faReply,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faReply } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 const CheckOut = () => {
@@ -19,21 +16,27 @@ const CheckOut = () => {
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [productId, update]);
+  const minimumOrder = parseInt(Math.ceil(quantity / 20));
   const handleOrder = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const newQuantity = parseInt(e.target.quantity.value);
+    if (newQuantity < minimumOrder) {
+      toast.error("please order minimum product");
+      return;
+    }
     const updateQuantity = parseInt(quantity - newQuantity);
+
     console.log(quantity, newQuantity, updateQuantity);
     setUpdate(!update);
     e.target.reset();
   };
-  const minimumOrder = parseInt(Math.ceil(quantity / 20));
+
   return (
     <Container className="mt-5">
       <Row className="gx-5 mx-auto  pb-5 my-5 align-items-center justify-content-center shadow-sm rounded-3 ">
         <Col xs={12} sm={12} md={6}>
-          <img className="w-100 " src={product.img} alt="" />
+          <img className="w-100 " src={img} alt="" />
           <h5>{name}</h5>
           <h6>
             Price :{" "}
@@ -159,24 +162,6 @@ const CheckOut = () => {
           </Form>
         </Col>
       </Row>
-      <Form className="shadow-sm bg-light p-5 rounded-pill">
-        <Col className="d-flex mx-auto w-100">
-          <Form.Control
-            name="quantity"
-            type="number"
-            placeholder="Quantity"
-            required
-          />
-          <Button
-            className="btn ms-3 d-flex mx-auto align-items-center  btn-outline-dark"
-            variant="light"
-            type="submit"
-            style={{ height: "40px" }}
-          >
-            RESTOCK <FontAwesomeIcon className="ms-2" icon={faReply} />
-          </Button>
-        </Col>
-      </Form>
     </Container>
   );
 };

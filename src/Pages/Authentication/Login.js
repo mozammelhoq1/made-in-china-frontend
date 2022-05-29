@@ -1,10 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
-import {
-  useSendPasswordResetEmail,
-  useSignInWithEmailAndPassword,
-} from "react-firebase-hooks/auth";
-import toast from "react-hot-toast";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import Loading from "../Shared/Loading";
@@ -15,13 +11,11 @@ import { useForm } from "react-hook-form";
 const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
-  const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const emailRef = useRef("");
   const navigate = useNavigate();
   const location = useLocation();
   let from = location.state?.from?.pathname || "/";
@@ -38,7 +32,7 @@ const Login = () => {
       <Alert variant="danger">This is a {error?.message} — check it out!</Alert>
     );
   }
-  if (loading || sending) {
+  if (loading) {
     return <Loading />;
   }
 
