@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import {
   useSendPasswordResetEmail,
@@ -10,19 +10,29 @@ import auth from "../../firebase.init";
 import Loading from "../Shared/Loading";
 import SocialLogin from "./SocialLogin";
 import loginImage from "../../Images/login.jpg";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
   const emailRef = useRef("");
-  const passwordRef = useRef("");
   const navigate = useNavigate();
   const location = useLocation();
   let from = location.state?.from?.pathname || "/";
 
   let errorElement;
 
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, from, navigate]);
   if (error) {
     errorElement = (
       <Alert variant="danger">This is a {error?.message} — check it out!</Alert>
@@ -31,42 +41,13 @@ const Login = () => {
   if (loading || sending) {
     return <Loading />;
   }
-  if (user) {
-    // navigate(from, { replace: true });
-  }
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    await signInWithEmailAndPassword(email, password);
 
-    navigate(from, { replace: true });
-  };
   const navigateRegister = (event) => {
     navigate("/register");
   };
 
-  const resetPassword = async () => {
-    const email = emailRef.current.value;
-
-    if (email) {
-      await sendPasswordResetEmail(email);
-      toast.success("sent email", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
-    } else {
-      toast.error("please enter your email address", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
-    }
+  const onSubmit = (data) => {
+    signInWithEmailAndPassword(data.email, data.password);
   };
   return (
     <>
@@ -77,28 +58,61 @@ const Login = () => {
           </Col>
           <Col xs={12} sm={12} md={6}>
             <h1 className="text-center">Please Login</h1>
-            <Form onSubmit={handleLogin}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
-                  required
-                  ref={emailRef}
+                  {...register("email", {
+                    required: {
+                      value: true,
+                      message: "Email is Required",
+                    },
+                    pattern: {
+                      value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                      message: "Provide a valid Email",
+                    },
+                  })}
                   type="email"
                   placeholder="Enter email"
                 />
                 <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
+                  {errors.email?.type === "required" && (
+                    <span className="text-danger">{errors.email.message}</span>
+                  )}
+                  {errors.email?.type === "pattern" && (
+                    <span className="text-danger">{errors.email.message}</span>
+                  )}
                 </Form.Text>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
-                  required
-                  ref={passwordRef}
+                  {...register("password", {
+                    required: {
+                      value: true,
+                      message: "Password is Required",
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "Must be 6 characters or longer",
+                    },
+                  })}
                   type="password"
                   placeholder="Password"
                 />
+                <Form.Text className="text-muted">
+                  {errors.password?.type === "required" && (
+                    <span className="text-danger">
+                      {errors.password.message}
+                    </span>
+                  )}
+                  {errors.password?.type === "pattern" && (
+                    <span className="text-danger">
+                      {errors.password.message}
+                    </span>
+                  )}
+                </Form.Text>
               </Form.Group>
 
               {errorElement}
@@ -112,7 +126,7 @@ const Login = () => {
             </Form>
             <div className="mt-3">
               <p>
-                New To Fragrantica?{" "}
+                You haven't any account?{" "}
                 <Link
                   to="/register"
                   className="text-primary pe-auto"
@@ -120,15 +134,6 @@ const Login = () => {
                 >
                   Please Register
                 </Link>
-              </p>
-              <p>
-                Forget Password?{" "}
-                <button
-                  className="btn btn-link text-primary pe-auto"
-                  onClick={resetPassword}
-                >
-                  Reset Password
-                </button>
               </p>
             </div>
             <SocialLogin />

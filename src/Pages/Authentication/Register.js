@@ -9,14 +9,22 @@ import auth from "../../firebase.init";
 import Loading from "../Shared/Loading";
 import SocialLogin from "./SocialLogin";
 import loginImage from "../../Images/login.jpg";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const Register = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
   const [agree, setAgree] = useState(false);
+
   const navigate = useNavigate();
 
   const navigateLogin = () => {
@@ -26,16 +34,12 @@ const Register = () => {
     return <Loading />;
   }
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    const name = event.target.name.value;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const agree = event.target.terms.checked;
+  const onSubmit = async (data) => {
     if (agree) {
-      await createUserWithEmailAndPassword(email, password);
-      await updateProfile({ displayName: name });
-      navigate("/products");
+      await createUserWithEmailAndPassword(data.email, data.password);
+      await updateProfile({ displayName: data.name });
+      toast.success("Success");
+      navigate("/");
     }
   };
   return (
@@ -46,40 +50,75 @@ const Register = () => {
         </Col>
         <Col xs={12} sm={12} md={6}>
           <h1 className="text-center">Please Register</h1>
-          <Form onSubmit={handleRegister}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3" controlId="formBasicText">
               <Form.Label>Your Name</Form.Label>
               <Form.Control
                 type="text"
-                name="name"
                 placeholder="Your Name"
-                required
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Name is Required",
+                  },
+                })}
               />
               <Form.Text className="text-muted">
-                We'll never share your name with anyone else.
+                {errors.name?.type === "required" && (
+                  <span className="text-danger">{errors.name.message}</span>
+                )}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
-                required
                 type="email"
-                name="email"
                 placeholder="Enter email"
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "Email is Required",
+                  },
+                  pattern: {
+                    value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                    message: "Provide a valid Email",
+                  },
+                })}
               />
               <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
+                {errors.email?.type === "required" && (
+                  <span className="text-danger">{errors.email.message}</span>
+                )}
+                {errors.email?.type === "pattern" && (
+                  <span className="text-danger">{errors.email.message}</span>
+                )}
               </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
-                required
                 type="password"
-                name="password"
                 placeholder="Password"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Password is Required",
+                  },
+                  minLength: {
+                    value: 6,
+                    message: "Must be 6 characters or longer",
+                  },
+                })}
               />
+              <Form.Text className="text-muted">
+                {errors.password?.type === "required" && (
+                  <span className="text-danger">{errors.password.message}</span>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <span className="text-danger">{errors.password.message}</span>
+                )}
+              </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check

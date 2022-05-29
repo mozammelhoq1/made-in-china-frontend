@@ -24,7 +24,7 @@ const CheckOut = () => {
     const name = e.target.name.value;
     const newQuantity = parseInt(e.target.quantity.value);
     const updateQuantity = parseInt(quantity - newQuantity);
-    console.log(updateQuantity);
+    console.log(quantity, newQuantity, updateQuantity);
     setUpdate(!update);
     e.target.reset();
   };
@@ -107,6 +107,7 @@ const CheckOut = () => {
             <Form.Group className="mb-3" controlId="formGridAddress2">
               <Form.Label>Enter Product Quantity</Form.Label>
               <Form.Control
+                required
                 type="number"
                 name="quantity"
                 placeholder="Enter Your Phone Number"
