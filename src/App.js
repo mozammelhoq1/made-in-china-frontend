@@ -16,6 +16,8 @@ import DashBoard from "./Pages/DashBoard/DashBoard";
 import AddReview from "./Pages/DashBoard/AddReview";
 import MyPortfolio from "./Pages/DashBoard/MyPortfolio";
 import AllUsers from "./Pages/DashBoard/AllUsers";
+import RequireAdmin from "./Pages/Authentication/RequireAdmin";
+import NotFound from "./Pages/Shared/NotFound";
 
 function App() {
   return (
@@ -43,12 +45,20 @@ function App() {
           <Route index element={<MyPortfolio />}></Route>
           <Route path="myorders" element={<MyOrders />}></Route>
           <Route path="review" element={<AddReview />}></Route>
-          <Route path="users" element={<AllUsers />}></Route>
+          <Route
+            path="users"
+            element={
+              <RequireAdmin>
+                <AllUsers />
+              </RequireAdmin>
+            }
+          ></Route>
         </Route>
         <Route path="/about" element={<About />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
       <Toaster />

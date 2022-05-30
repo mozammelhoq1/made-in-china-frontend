@@ -21,7 +21,6 @@ import {
   ProSidebar,
   Menu,
   MenuItem,
-  SubMenu,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
@@ -29,9 +28,14 @@ import {
 import "react-pro-sidebar/dist/css/styles.css";
 import "./DashBoard.css";
 import { Link, Outlet } from "react-router-dom";
-const DashBoard = ({ show, setShow }) => {
+import { useAuthState } from "react-firebase-hooks/auth";
+import useAdmin from "../../hooks/useAdmin";
+const DashBoard = () => {
+  const [user] = useAuthState(auth);
+  const [admin] = useAdmin(user);
   const handleLogOut = () => {
     signOut(auth);
+    localStorage.removeItem("accessToken");
   };
   //create initial menuCollapse state using useState hook
   const [menuCollapse, setMenuCollapse] = useState(false);
@@ -66,66 +70,75 @@ const DashBoard = ({ show, setShow }) => {
               </SidebarHeader>
               <SidebarContent>
                 <Menu iconShape="square">
-                  <MenuItem active={true}>
-                    <FontAwesomeIcon className="m-1" icon={faUserShield} />{" "}
-                    Admin
-                  </MenuItem>
-                  <MenuItem>
-                    <Link
-                      className="text-decoration-none text-dark"
-                      to="/dashboard/users"
-                    >
-                      <FontAwesomeIcon icon={faUserCog} /> All Users
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link className="text-decoration-none text-dark" to="/">
-                      <FontAwesomeIcon icon={faPlusSquare} /> Add Product
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link className="text-decoration-none text-dark" to="/">
-                      <FontAwesomeIcon icon={faTasks} /> Manage Products
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link className="text-decoration-none text-dark" to="/">
-                      <FontAwesomeIcon icon={faCogs} /> Manage All Order's
-                    </Link>
-                  </MenuItem>
+                  {admin ? (
+                    <>
+                      <MenuItem active={true}>
+                        <FontAwesomeIcon className="m-1" icon={faUserShield} />{" "}
+                        Admin
+                      </MenuItem>
+                      <MenuItem>
+                        <Link
+                          className="text-decoration-none text-dark"
+                          to="/dashboard/users"
+                        >
+                          <FontAwesomeIcon icon={faUserCog} /> All Users
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link className="text-decoration-none text-dark" to="/">
+                          <FontAwesomeIcon icon={faPlusSquare} /> Add Product
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link className="text-decoration-none text-dark" to="/">
+                          <FontAwesomeIcon icon={faTasks} /> Manage Products
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link className="text-decoration-none text-dark" to="/">
+                          <FontAwesomeIcon icon={faCogs} /> Manage All Order's
+                        </Link>
+                      </MenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <MenuItem active={true}>
+                        <Link className="text-dark" to="/dashboard">
+                          <FontAwesomeIcon className="m-1" icon={faUser} /> User
+                          Profile
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link
+                          className="text-decoration-none text-dark"
+                          to="/dashboard/myorders"
+                        >
+                          <FontAwesomeIcon icon={faCartPlus} /> My Order
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link
+                          className="text-decoration-none text-dark"
+                          to="/dashboard/review"
+                        >
+                          <FontAwesomeIcon icon={faStar} /> Review{" "}
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link className="text-decoration-none text-dark" to="/">
+                          <FontAwesomeIcon icon={faCreditCard} /> Payment{" "}
+                        </Link>
+                      </MenuItem>
+                    </>
+                  )}
+                  {/* users  */}
                 </Menu>
               </SidebarContent>
-              <SidebarContent>
+              {/* <SidebarContent>
                 <Menu iconShape="square">
-                  <MenuItem active={true}>
-                    <Link className="text-dark" to="/dashboard">
-                      <FontAwesomeIcon className="m-1" icon={faUser} /> User
-                      Profile
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link
-                      className="text-decoration-none text-dark"
-                      to="/dashboard/myorders"
-                    >
-                      <FontAwesomeIcon icon={faCartPlus} /> My Order
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link
-                      className="text-decoration-none text-dark"
-                      to="/dashboard/review"
-                    >
-                      <FontAwesomeIcon icon={faStar} /> Review{" "}
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link className="text-decoration-none text-dark" to="/">
-                      <FontAwesomeIcon icon={faCreditCard} /> Payment{" "}
-                    </Link>
-                  </MenuItem>
+                  
                 </Menu>
-              </SidebarContent>
+              </SidebarContent> */}
               <SidebarFooter>
                 <Menu iconShape="square">
                   <MenuItem>

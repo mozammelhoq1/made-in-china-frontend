@@ -14,7 +14,7 @@ const CheckOut = () => {
   const [update, setUpdate] = useState(true);
   const { name, price, quantity, img, description } = product;
   useEffect(() => {
-    const url = `http://localhost:5000/checkout/${productId}`;
+    const url = `https://fathomless-fjord-91095.herokuapp.com/checkout/${productId}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setProduct(data));
@@ -44,7 +44,7 @@ const CheckOut = () => {
       phone: e.target.number.value,
       address: e.target.address.value,
     };
-    const url = `http://localhost:5000/orders`;
+    const url = `https://fathomless-fjord-91095.herokuapp.com/orders`;
     fetch(url, {
       method: "POST",
       headers: {
