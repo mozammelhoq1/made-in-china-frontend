@@ -97,6 +97,7 @@ const DashBoard = ({ show, setShow }) => {
                   <MenuItem active={true}>
                     <Link className="text-dark" to="/dashboard">
                       <FontAwesomeIcon className="m-1" icon={faUser} /> User
+                      Profile
                     </Link>
                   </MenuItem>
                   <MenuItem>
@@ -142,7 +143,7 @@ const DashBoard = ({ show, setShow }) => {
         </div>
       </div>
       <div className="col-md-11 col-sm-12 p-0 ms-auto">
-        <h2 className="text-center">Dashboard</h2>
+        <h2 className="text-center my-5">Dashboard</h2>
         <Outlet></Outlet>
       </div>
     </div>

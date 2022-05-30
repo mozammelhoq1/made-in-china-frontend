@@ -7,10 +7,12 @@ import Loading from "../Shared/Loading";
 import SocialLogin from "./SocialLogin";
 import loginImage from "../../Images/login.jpg";
 import { useForm } from "react-hook-form";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
+  const [token] = useToken(user);
   const {
     register,
     formState: { errors },
@@ -23,10 +25,10 @@ const Login = () => {
   let errorElement;
 
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate(from, { replace: true });
     }
-  }, [user, from, navigate]);
+  }, [from, navigate, token]);
   if (error) {
     errorElement = (
       <Alert variant="danger">This is a {error?.message} — check it out!</Alert>

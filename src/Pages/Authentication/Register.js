@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import {
+  useAuthState,
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import Loading from "../Shared/Loading";
 import SocialLogin from "./SocialLogin";
@@ -14,34 +15,72 @@ import toast from "react-hot-toast";
 import useToken from "../../hooks/useToken";
 
 const Register = () => {
+  const [agree, setAgree] = useState(false);
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const [createUserWithEmailAndPassword, user, loading] =
+  const [createUserWithEmailAndPassword, user, error, loading] =
     useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
-
-  const [agree, setAgree] = useState(false);
+  // const [token, setToken] = useState("");
+  const navigate = useNavigate();
   const [token] = useToken(user);
 
-  const navigate = useNavigate();
+  // genaret token start
+  // useEffect(() => {
+  //   const email = user?.user?.email;
+  //   console.log(email);
+  //   const currentUser = { email: email };
+  //   if (email) {
+  //     fetch(`http://localhost:5000/user/${email}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //       body: JSON.stringify(currentUser),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         console.log(
+  //           "data inside token inside create email with pass : ",
+  //           data
+  //         );
+  //         const accessToken = data.token;
+  //         localStorage.setItem("accessToken", accessToken);
+  //         setToken(accessToken);
+  //       });
+  //   }
+  // }, [user]);
+  // genaret token end
+  useEffect(() => {
+    if (token) {
+      navigate("/products");
+    }
+    // eslint-disable-next-line no-use-before-define
+  }, [navigate, token]);
+  let errorElement;
 
   const navigateLogin = () => {
     navigate("/login");
   };
+
   if (loading || updating) {
     return <Loading />;
+  }
+
+  if (error || updateError) {
+    errorElement = (
+      <Alert variant="danger">This is a {error?.message} — check it out!</Alert>
+    );
   }
 
   const onSubmit = async (data) => {
     if (agree) {
       await createUserWithEmailAndPassword(data.email, data.password);
       await updateProfile({ displayName: data.name });
-      toast.success("Success");
-      // navigate("/");
     }
   };
   return (
@@ -140,6 +179,7 @@ const Register = () => {
               SUBMIT
             </Button>
           </Form>
+          {errorElement}
           <p>
             Already Have An Account?{" "}
             <Link

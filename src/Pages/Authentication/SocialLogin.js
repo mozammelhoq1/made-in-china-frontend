@@ -5,18 +5,20 @@ import google from "../../Images/google.png";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import Loading from "../Shared/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
+import useToken from "../../hooks/useToken";
 
 const SocialLogin = () => {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [token] = useToken(user);
   const navigate = useNavigate();
   const location = useLocation();
   let from = location.state?.from?.pathname || "/";
   let errorElement;
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate(from, { replace: true });
     }
-  }, [user, from, navigate]);
+  }, [from, navigate, token]);
   if (loading) {
     return <Loading />;
   }
