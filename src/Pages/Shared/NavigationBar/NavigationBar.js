@@ -14,6 +14,7 @@ const NavigationBar = () => {
   const [user] = useAuthState(auth);
   const handleLogOut = () => {
     signOut(auth);
+    localStorage.removeItem("accessToken");
   };
   return (
     <Navbar

@@ -71,8 +71,11 @@ const DashBoard = ({ show, setShow }) => {
                     Admin
                   </MenuItem>
                   <MenuItem>
-                    <Link className="text-decoration-none text-dark" to="/">
-                      <FontAwesomeIcon icon={faUserCog} /> Make Admin
+                    <Link
+                      className="text-decoration-none text-dark"
+                      to="/dashboard/users"
+                    >
+                      <FontAwesomeIcon icon={faUserCog} /> All Users
                     </Link>
                   </MenuItem>
                   <MenuItem>

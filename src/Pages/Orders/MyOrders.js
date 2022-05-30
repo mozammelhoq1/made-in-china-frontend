@@ -1,21 +1,41 @@
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 
 const MyOrders = () => {
   const [user] = useAuthState(auth);
 
   const [myOrders, setMyOrders] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const email = user?.email;
     const url = `http://localhost:5000/myorders?email=${email}`;
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => setMyOrders(data));
-  }, [user]);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((res) => {
+        console.log("response : ", res);
+        if (res.status === 401 || res.status === 403) {
+          // log out with remove token from local storage & navigate to home
+          signOut(auth);
+          localStorage.removeItem("accessToken");
+          navigate("/");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("status");
+        setMyOrders(data);
+      });
+  }, [navigate, user]);
 
   const handleDelete = (id) => {
     const proceed = window.confirm("Are you want to sure delete this item?");
