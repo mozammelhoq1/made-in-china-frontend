@@ -73,29 +73,43 @@ const DashBoard = () => {
                   {admin ? (
                     <>
                       <MenuItem active={true}>
-                        <FontAwesomeIcon className="m-1" icon={faUserShield} />{" "}
-                        Admin
+                        <Link className="text-dark dash-menu" to="/dashboard">
+                          <FontAwesomeIcon
+                            className="m-1"
+                            icon={faUserShield}
+                          />{" "}
+                          Profile
+                        </Link>
                       </MenuItem>
                       <MenuItem>
                         <Link
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-dark dash-menu"
                           to="/dashboard/users"
                         >
                           <FontAwesomeIcon icon={faUserCog} /> All Users
                         </Link>
                       </MenuItem>
                       <MenuItem>
-                        <Link className="text-decoration-none text-dark" to="/">
+                        <Link
+                          className="text-decoration-none text-dark dash-menu"
+                          to="/dashboard/addProduct"
+                        >
                           <FontAwesomeIcon icon={faPlusSquare} /> Add Product
                         </Link>
                       </MenuItem>
                       <MenuItem>
-                        <Link className="text-decoration-none text-dark" to="/">
+                        <Link
+                          className="text-decoration-none text-dark dash-menu"
+                          to="/dashboard/manageProduct"
+                        >
                           <FontAwesomeIcon icon={faTasks} /> Manage Products
                         </Link>
                       </MenuItem>
                       <MenuItem>
-                        <Link className="text-decoration-none text-dark" to="/">
+                        <Link
+                          className="text-decoration-none text-dark dash-menu"
+                          to="/"
+                        >
                           <FontAwesomeIcon icon={faCogs} /> Manage All Order's
                         </Link>
                       </MenuItem>
@@ -103,14 +117,14 @@ const DashBoard = () => {
                   ) : (
                     <>
                       <MenuItem active={true}>
-                        <Link className="text-dark" to="/dashboard">
-                          <FontAwesomeIcon className="m-1" icon={faUser} /> User
+                        <Link className="text-dark dash-menu" to="/dashboard">
+                          <FontAwesomeIcon className="m-1" icon={faUser} />
                           Profile
                         </Link>
                       </MenuItem>
                       <MenuItem>
                         <Link
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-dark dash-menu"
                           to="/dashboard/myorders"
                         >
                           <FontAwesomeIcon icon={faCartPlus} /> My Order
@@ -118,14 +132,17 @@ const DashBoard = () => {
                       </MenuItem>
                       <MenuItem>
                         <Link
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-dark dash-menu"
                           to="/dashboard/review"
                         >
                           <FontAwesomeIcon icon={faStar} /> Review{" "}
                         </Link>
                       </MenuItem>
                       <MenuItem>
-                        <Link className="text-decoration-none text-dark" to="/">
+                        <Link
+                          className="text-decoration-none text-dark dash-menu"
+                          to="/"
+                        >
                           <FontAwesomeIcon icon={faCreditCard} /> Payment{" "}
                         </Link>
                       </MenuItem>

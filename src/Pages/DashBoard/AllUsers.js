@@ -12,7 +12,7 @@ const AllUsers = () => {
     isLoading,
     refetch,
   } = useQuery("users", () =>
-    fetch("https://fathomless-fjord-91095.herokuapp.com/user", {
+    fetch("http://localhost:5000/user", {
       method: "GET",
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -49,7 +49,7 @@ const AllUsers = () => {
               ))}
             </tr>
           </thead>
-          {users.map((user) => (
+          {users?.map((user) => (
             <UserData refetch={refetch} key={user._id} user={user}></UserData>
           ))}
         </Table>

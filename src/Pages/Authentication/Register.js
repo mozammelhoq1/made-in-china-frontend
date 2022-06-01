@@ -35,7 +35,7 @@ const Register = () => {
   //   console.log(email);
   //   const currentUser = { email: email };
   //   if (email) {
-  //     fetch(`https://fathomless-fjord-91095.herokuapp.com/user/${email}`, {
+  //     fetch(`http://localhost:5000/user/${email}`, {
   //       method: "PUT",
   //       headers: {
   //         "content-type": "application/json",

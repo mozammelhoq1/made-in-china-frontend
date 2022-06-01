@@ -18,6 +18,8 @@ import MyPortfolio from "./Pages/DashBoard/MyPortfolio";
 import AllUsers from "./Pages/DashBoard/AllUsers";
 import RequireAdmin from "./Pages/Authentication/RequireAdmin";
 import NotFound from "./Pages/Shared/NotFound";
+import AddProduct from "./Pages/DashBoard/AddProduct";
+import ManageProduct from "./Pages/DashBoard/ManageProduct";
 
 function App() {
   return (
@@ -50,6 +52,22 @@ function App() {
             element={
               <RequireAdmin>
                 <AllUsers />
+              </RequireAdmin>
+            }
+          ></Route>
+          <Route
+            path="addProduct"
+            element={
+              <RequireAdmin>
+                <AddProduct />
+              </RequireAdmin>
+            }
+          ></Route>
+          <Route
+            path="manageProduct"
+            element={
+              <RequireAdmin>
+                <ManageProduct />
               </RequireAdmin>
             }
           ></Route>

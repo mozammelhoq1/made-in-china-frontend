@@ -14,7 +14,7 @@ const MyOrders = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const email = user?.email;
-    const url = `https://fathomless-fjord-91095.herokuapp.com/myorders?email=${email}`;
+    const url = `http://localhost:5000/myorders?email=${email}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -41,7 +41,7 @@ const MyOrders = () => {
     const proceed = window.confirm("Are you want to sure delete this item?");
 
     if (proceed) {
-      const url = `https://fathomless-fjord-91095.herokuapp.com/orders/${id}`;
+      const url = `http://localhost:5000/orders/${id}`;
       fetch(url, {
         method: "DELETE",
       })

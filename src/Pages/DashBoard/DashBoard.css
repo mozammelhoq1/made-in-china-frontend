@@ -75,3 +75,11 @@
 #header .logo {
   padding: 20px;
 }
+
+.dash-menu {
+  cursor: pointer;
+}
+.dash-menu:hover {
+  font-weight: 900;
+  color: rgb(224, 61, 32) !important;
+}
